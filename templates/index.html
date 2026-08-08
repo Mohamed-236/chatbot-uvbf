@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chatbot UVB - Université Virtuelle du Burkina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --indigo: #17233d;
+            --indigo-light: #26375c;
+            --cream: #f7f1e0;
+            --terracotta: #c1541c;
+            --ochre: #d9a514;
+            --green: #12492f;
+            --text-dark: #23190f;
+            --text-muted: #6f6552;
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--indigo);
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            padding: 48px 20px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 620px;
+        }
+
+        /* Bande tissée façon Faso Dan Fani : signature du design */
+        .weave {
+            height: 10px;
+            border-radius: 6px 6px 0 0;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--terracotta) 0px, var(--terracotta) 18px,
+                var(--ochre) 18px, var(--ochre) 30px,
+                var(--green) 30px, var(--green) 44px,
+                var(--indigo-light) 44px, var(--indigo-light) 52px
+            );
+        }
+
+        .weave--thin {
+            height: 6px;
+            border-radius: 0 0 6px 6px;
+            opacity: 0.85;
+        }
+
+        .card {
+            background: var(--cream);
+            padding: 40px 36px 32px;
+        }
+
+        .eyebrow {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--terracotta);
+            margin: 0 0 10px;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(28px, 5vw, 38px);
+            line-height: 1.1;
+            margin: 0 0 12px;
+            color: var(--indigo);
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin: 0 0 28px;
+            max-width: 46ch;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            font-family: var(--font-body);
+            font-size: 15px;
+            padding: 13px 16px;
+            border: 1.5px solid #d8cdb2;
+            border-radius: 8px;
+            background: #ffffff;
+            color: var(--text-dark);
+            outline-offset: 2px;
+        }
+
+        input[type="text"]:focus-visible {
+            outline: 2px solid var(--indigo);
+            border-color: var(--indigo);
+        }
+
+        button {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 0 22px;
+            border: none;
+            border-radius: 8px;
+            background: var(--indigo);
+            color: var(--cream);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        button:hover {
+            background: var(--terracotta);
+        }
+
+        button:focus-visible {
+            outline: 2px solid var(--indigo);
+            outline-offset: 2px;
+        }
+
+        .exchange {
+            margin-top: 28px;
+            border-top: 1px solid #e2d8bd;
+            padding-top: 24px;
+        }
+
+        .bubble {
+            padding: 4px 0 16px 16px;
+            border-left: 3px solid var(--terracotta);
+            margin-bottom: 18px;
+        }
+
+        .bubble--reponse {
+            border-left-color: var(--green);
+            padding-bottom: 4px;
+        }
+
+        .label {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .bubble p {
+            margin: 0;
+            font-size: 15.5px;
+            line-height: 1.55;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 18px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            color: rgba(247, 241, 224, 0.45);
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="weave"></div>
+        <div class="card">
+            <p class="eyebrow">Assistant virtuel</p>
+            <h1>Chatbot &mdash; Université Virtuelle du Burkina</h1>
+            <p class="subtitle">Posez une question sur l'UVB : inscription, filières, localisation, diplômes, et plus encore.</p>
+
+            <form method="POST">
+                <input
+                    type="text"
+                    name="question"
+                    placeholder="Écrivez votre question ici..."
+                    required
+                    value="{{ question if question else '' }}"
+                >
+                <button type="submit">Envoyer</button>
+            </form>
+
+            {% if question or reponse %}
+            <div class="exchange">
+                {% if question %}
+                <div class="bubble">
+                    <span class="label">Vous</span>
+                    <p>{{ question }}</p>
+                </div>
+                {% endif %}
+
+                {% if reponse %}
+                <div class="bubble bubble--reponse">
+                    <span class="label">UVB</span>
+                    <p>{{ reponse }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="weave weave--thin"></div>
+        <footer>Université Virtuelle du Burkina</footer>
+    </div>
+</body>
+</html>
